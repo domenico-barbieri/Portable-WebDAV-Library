@@ -103,6 +103,41 @@ namespace DecaTec.WebDav.Tools
         }
 
         /// <summary>
+        /// Gets the <see cref="ActiveLock"/> from a <see cref="WebDavResponseMessage"/>.
+        /// </summary>
+        /// <param name="responseMessage">The <see cref="WebDavResponseMessage"/> whose <see cref="ActiveLock"/> should be retrieved.</param>
+        /// <returns>The <see cref="ActiveLock"/> of the <see cref="WebDavResponseMessage"/> or null if the <see cref="WebDavResponseMessage"/> does not contain a lock token.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="responseMessage"/> is null.</exception>
+        public static ActiveLock GetActiveLockFromWebDavResponseMessage(WebDavResponseMessage responseMessage)
+        {
+            if (responseMessage == null)
+                throw new ArgumentNullException(nameof(responseMessage));
+
+            var prop = WebDavResponseContentParser.ParsePropResponseContentAsync(responseMessage.Content).Result;
+            var activeLock = prop.LockDiscovery?.ActiveLock.FirstOrDefault();
+
+            if (activeLock == null)
+                return null;
+
+            // If lock token was not be found in the response content, it should be submitted by response header.
+            if (activeLock.LockToken == null)
+            {
+                // Try to get lock token from response header.
+                if (responseMessage.Headers.TryGetValues(WebDavRequestHeader.LockToken, out IEnumerable<string> lockTokenHeaderValues))
+                {
+                    // We assume only one Lock-Token header is sent, based on the spec: https://tools.ietf.org/html/rfc4918#section-9.10.1
+                    var lockTokenHeaderValue = lockTokenHeaderValues.FirstOrDefault();
+
+                    // Make sure the lockTokenHeaderValue is valid according to spec (https://tools.ietf.org/html/rfc4918#section-10.5).
+                    if (lockTokenHeaderValue != null && CodedUrl.TryParse(lockTokenHeaderValue, out var _))
+                        activeLock.LockToken = new WebDavLockToken { Href = lockTokenHeaderValue };
+                }
+            }
+
+            return activeLock;
+        }
+
+        /// <summary>
         /// Extracts the property names (known and unknown) from a <see cref="HttpContent"/>.
         /// </summary>
         /// <param name="content">The <see cref="HttpContent"/> containing the <see cref="Multistatus"/> as XML.</param>

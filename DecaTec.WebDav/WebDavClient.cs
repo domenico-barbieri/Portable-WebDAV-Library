@@ -391,6 +391,17 @@ namespace DecaTec.WebDav
         }
 
         /// <summary>
+        /// Sends a DELETE request to the specified <see cref="Uri"/>.
+        /// </summary>
+        /// <param name="requestUri">The <see cref="Uri"/> the request is sent to.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>The <see cref="Task"/> representing the asynchronous operation.</returns>
+        public new async Task<WebDavResponseMessage> DeleteAsync(Uri requestUri, CancellationToken cancellationToken)
+        {
+            return await DeleteAsync(requestUri, null, cancellationToken);
+        }
+
+        /// <summary>
         /// Sends a DELETE request to the specified URL.
         /// </summary>
         /// <param name="requestUrl">The URL the request is sent to.</param>
@@ -400,17 +411,6 @@ namespace DecaTec.WebDav
         public async Task<WebDavResponseMessage> DeleteAsync(string requestUrl, LockToken lockToken, CancellationToken cancellationToken)
         {
             return await DeleteAsync(UriHelper.CreateUriFromUrl(requestUrl), lockToken, cancellationToken);
-        }
-
-        /// <summary>
-        /// Sends a DELETE request to the specified <see cref="Uri"/>.
-        /// </summary>
-        /// <param name="requestUri">The <see cref="Uri"/> the request is sent to.</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/> that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>The <see cref="Task"/> representing the asynchronous operation.</returns>
-        public new async Task<WebDavResponseMessage> DeleteAsync(Uri requestUri, CancellationToken cancellationToken)
-        {
-            return await DeleteAsync(requestUri, null, cancellationToken);
         }
 
         /// <summary>
@@ -467,8 +467,6 @@ namespace DecaTec.WebDav
             var requestMethod = new HttpRequestMessage(HttpMethod.Get, uri);
             SetHttpVersion(requestMethod);
             var httpResponseMessage = await this.SendAsync(requestMethod, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-            // #TODO
-            //var response = await this.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             httpResponseMessage.EnsureSuccessStatusCode();
 
             if (!(httpResponseMessage.Content.Headers.TryGetValues(HttpHeaderNames.ContentLength, out IEnumerable<string> contentLengthHeader) && long.TryParse(contentLengthHeader.FirstOrDefault(), out long totalLength)))
@@ -576,8 +574,6 @@ namespace DecaTec.WebDav
             var requestMethod = new HttpRequestMessage(HttpMethod.Get, requestUri);
             SetHttpVersion(requestMethod);
             var httpResponseMessage = await this.SendAsync(requestMethod, completionOption, cancellationToken);
-            // #TODO
-            //var httpResponseMessage = await base.GetAsync(requestUri, completionOption, cancellationToken);
             return new WebDavResponseMessage(httpResponseMessage);
         }
 
@@ -1078,6 +1074,28 @@ namespace DecaTec.WebDav
         public async Task<WebDavResponseMessage> MkcolAsync(Uri requestUri, LockToken lockToken)
         {
             return await MkcolAsync(requestUri, lockToken, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Creates a collection at the <see cref="Uri"/> specified.
+        /// </summary>
+        /// <param name="requestUri">The <see cref="Uri"/> of the collection to create.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>The <see cref="Task"/> representing the asynchronous operation.</returns>
+        public async Task<WebDavResponseMessage> MkcolAsync(Uri requestUri, CancellationToken cancellationToken)
+        {
+            return await MkcolAsync(requestUri, null, HttpCompletionOption.ResponseContentRead, cancellationToken);
+        }
+
+        /// <summary>
+        /// Creates a collection at the URL specified.
+        /// </summary>
+        /// <param name="requestUrl">The URL of the collection to create.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>The <see cref="Task"/> representing the asynchronous operation.</returns>
+        public async Task<WebDavResponseMessage> MkcolAsync(string requestUrl, CancellationToken cancellationToken)
+        {
+            return await MkcolAsync(UriHelper.CreateUriFromUrl(requestUrl), null, HttpCompletionOption.ResponseContentRead, cancellationToken);
         }
 
         /// <summary>
@@ -2412,8 +2430,6 @@ namespace DecaTec.WebDav
             SetHttpVersion(requestMethod);
             var httpResponseMessage = await this.SendAsync(requestMethod, cancellationToken);
             return new WebDavResponseMessage(httpResponseMessage);
-            // #TODO
-            //return new WebDavResponseMessage(await this.PutAsync(uri, streamContent, lockToken, cancellationToken));
         }
 
         #endregion Upload file
