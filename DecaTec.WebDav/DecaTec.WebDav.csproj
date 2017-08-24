@@ -1,48 +1,114 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFramework>netstandard1.1</TargetFramework>
-    <PackageId>PortableWebDavLibrary</PackageId>
-    <Version>1.1.0.0</Version>
-    <Authors>DecaTec</Authors>
-    <Company>DecaTec</Company>
-    <Product>PortableWebDavLibrary</Product>
-    <Description>The Portable WebDAV Library is a strongly typed, async WebDAV client library which is fully compliant to RFC 4918, RFC 4331 and "Additional WebDAV Collection Properties". It is implemented as .NETStandard 1.1 library in oder to be used on any platform supporting .NETStandard 1.1.</Description>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/DecaTec/Portable-WebDAV-Library/raw/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/DecaTec/Portable-WebDAV-Library</PackageProjectUrl>
-    <PackageIconUrl>https://github.com/DecaTec/Portable-WebDAV-Library/raw/master/Assets/NuGetLogo.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/DecaTec/Portable-WebDAV-Library</RepositoryUrl>
-    <PackageTags>WebDAV, portable, NETStandard, NETCore, UWP, dotnet, portable-webdav-library, Xamarin, Mono, multiplatform</PackageTags>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Full documentation with changelog is available at https://decatec.de/ext/PortableWebDAVLibrary/Doc</PackageReleaseNotes>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{94B68714-6592-47E7-B705-988F8CDCC546}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DecaTec.WebDav</RootNamespace>
+    <AssemblyName>DecaTec.WebDav</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\Build\Debug\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\Build\Release\</OutputPath>
-    <DocumentationFile>..\Build\Release\netstandard1.1\DecaTec.WebDav.XML</DocumentationFile>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-
   <ItemGroup>
-    <Folder Include="WebDavArtifacts\" />
+    <Compile Include="AbsoluteUri.cs" />
+    <Compile Include="AdditionalWebDavProperties.cs" />
+    <Compile Include="CodedUrl.cs" />
+    <Compile Include="Constants\PropNameConstants.cs" />
+    <Compile Include="Constants\WebDavConstants.cs" />
+    <Compile Include="Exceptions\WebDavException.cs" />
+    <Compile Include="Extensions\XElementArrayExtensions.cs" />
+    <Compile Include="Headers\HttpHeaderNames.cs" />
+    <Compile Include="Headers\HttpTranslateHeaderValues.cs" />
+    <Compile Include="Headers\WebDavDepthHeaderValue.cs" />
+    <Compile Include="Headers\WebDavOverwriteHeaderValue.cs" />
+    <Compile Include="Headers\WebDavRequestHeader.cs" />
+    <Compile Include="Headers\WebDavTimeoutHeaderValue.cs" />
+    <Compile Include="LockToken.cs" />
+    <Compile Include="MessageHandlers\DebugHttpMessageHandler.cs" />
+    <Compile Include="NoTagList.cs" />
+    <Compile Include="PermanentLock.cs" />
+    <Compile Include="ProgressStream.cs" />
+    <Compile Include="ProgressStreamContent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\PropStatHelper.cs" />
+    <Compile Include="Tools\TextHelper.cs" />
+    <Compile Include="Tools\UriHelper.cs" />
+    <Compile Include="Tools\WebDavHelper.cs" />
+    <Compile Include="WebDavArtifacts\ActiveLock.cs" />
+    <Compile Include="WebDavArtifacts\AllProp.cs" />
+    <Compile Include="WebDavArtifacts\Collection.cs" />
+    <Compile Include="WebDavArtifacts\Exclusive.cs" />
+    <Compile Include="WebDavArtifacts\Include.cs" />
+    <Compile Include="WebDavArtifacts\ItemsChoiceType.cs" />
+    <Compile Include="WebDavArtifacts\KeepAlive.cs" />
+    <Compile Include="WebDavArtifacts\Link.cs" />
+    <Compile Include="WebDavArtifacts\LockDiscovery.cs" />
+    <Compile Include="WebDavArtifacts\LockEntry.cs" />
+    <Compile Include="WebDavArtifacts\LockInfo.cs" />
+    <Compile Include="WebDavArtifacts\LockRoot.cs" />
+    <Compile Include="WebDavArtifacts\LockScope.cs" />
+    <Compile Include="WebDavArtifacts\LockType.cs" />
+    <Compile Include="WebDavArtifacts\Multistatus.cs" />
+    <Compile Include="WebDavArtifacts\Omit.cs" />
+    <Compile Include="WebDavArtifacts\Prop.cs" />
+    <Compile Include="WebDavArtifacts\PropertyBehavior.cs" />
+    <Compile Include="WebDavArtifacts\PropertyUpdate.cs" />
+    <Compile Include="WebDavArtifacts\PropFind.cs" />
+    <Compile Include="WebDavArtifacts\PropName.cs" />
+    <Compile Include="WebDavArtifacts\Propstat.cs" />
+    <Compile Include="WebDavArtifacts\Remove.cs" />
+    <Compile Include="WebDavArtifacts\ResourceType.cs" />
+    <Compile Include="WebDavArtifacts\Response.cs" />
+    <Compile Include="WebDavArtifacts\Set.cs" />
+    <Compile Include="WebDavArtifacts\Shared.cs" />
+    <Compile Include="WebDavArtifacts\Source.cs" />
+    <Compile Include="WebDavArtifacts\SupportedLock.cs" />
+    <Compile Include="WebDavArtifacts\WebDavLockToken.cs" />
+    <Compile Include="WebDavArtifacts\Write.cs" />
+    <Compile Include="WebDavAuthenticationType.cs" />
+    <Compile Include="WebDavClient.cs" />
+    <Compile Include="WebDavMethod.cs" />
+    <Compile Include="WebDavProgress.cs" />
+    <Compile Include="WebDavResponseContentParser.cs" />
+    <Compile Include="WebDavResponseMessage.cs" />
+    <Compile Include="WebDavSession.cs" />
+    <Compile Include="WebDavSessionItem.cs" />
+    <Compile Include="WebDavStatusCode.cs" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="System.Net.Http" Version="4.3.2" />
-    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+    <Content Include="ReadMe.txt" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="ReadMe.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>
