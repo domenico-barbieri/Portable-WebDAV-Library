@@ -147,7 +147,7 @@ namespace DecaTec.WebDav
                 {
                     var changedProperty = this.additionalPropertiesInternal.SingleOrDefault(x => x.Key == propertyOriginal.Key);
 
-                    if (changedProperty.Equals(default(KeyValuePair<XName, string>)) || (propertyOriginal.Value != null && string.CompareOrdinal(changedProperty.Value, propertyOriginal.Value) != 0))
+                    if (propertyOriginal.Equals(default(KeyValuePair<XName, string>)) || (changedProperty.Value != null && string.CompareOrdinal(changedProperty.Value, propertyOriginal.Value) != 0))
                     {
                         xElementList.Add(new XElement(changedProperty.Key, changedProperty.Value));
                     }

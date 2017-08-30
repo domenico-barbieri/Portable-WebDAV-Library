@@ -3,6 +3,12 @@ using System;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Xml;
+using System.Xml.Schema;
+using System.Collections.Generic;
+using System.Reflection;
+using System.IO;
+using System.Text;
 
 namespace DecaTec.WebDav.WebDavArtifacts
 {
@@ -16,7 +22,7 @@ namespace DecaTec.WebDav.WebDavArtifacts
     [DataContract]
     [XmlType(TypeName = WebDavConstants.Prop, Namespace = WebDavConstants.DAV)]
     [XmlRoot(Namespace = WebDavConstants.DAV, IsNullable = false)]
-    public class Prop
+    public class Prop : IXmlSerializable
     {
         /// <summary>
         /// Creates a Prop with empty properties. This is especially useful for PROPFIND commands where only specific properties should be requested.
@@ -834,6 +840,166 @@ namespace DecaTec.WebDav.WebDavArtifacts
         {
             get;
             set;
+        }
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            var typeInfo = GetType().GetTypeInfo();
+            var xmlRoot = typeInfo.GetCustomAttribute<XmlRootAttribute>();
+
+            reader.ReadStartElement();
+
+            var properties = new List<XElement>();
+            while(reader.NodeType != XmlNodeType.EndElement)
+            {
+                var isCustom = true;
+                foreach (var propertyInfo in typeInfo.DeclaredProperties)
+                {
+                    var localName = propertyInfo.Name;
+
+                    if (propertyInfo.GetCustomAttribute<XmlIgnoreAttribute>() != null)
+                    {
+                        continue;
+                    }
+
+                    var attribute = propertyInfo.GetCustomAttribute<XmlAttributeAttribute>();
+                    if (attribute != null)
+                    {
+                        var tokens = attribute.AttributeName.Split(':');
+                        localName = tokens[tokens.Length - 1];
+                    }
+                    else
+                    {
+                        var element = propertyInfo.GetCustomAttribute<XmlElementAttribute>();
+                        if (element != null)
+                        {
+                            localName = element.ElementName;
+                        }
+                    }
+
+                    if (localName == reader.LocalName)
+                    {
+                        object value = null;
+
+                        var propertyTypeInfo = propertyInfo.PropertyType.GetTypeInfo();
+                        if (propertyTypeInfo.IsPrimitive || propertyInfo.PropertyType == typeof(string))
+                        {
+                            value = reader.ReadElementContentAsObject();
+                        }
+                        else
+                        {
+
+                            var xmlSerializer = new XmlSerializer(propertyInfo.PropertyType);
+                            value = xmlSerializer.Deserialize(reader);
+                        }
+
+                        propertyInfo.SetValue(this, value);
+                        isCustom = false;
+                        break;
+                    }
+                }
+
+                if (isCustom)
+                {
+                    properties.Add(ReadXElement(reader));
+                }
+            }
+
+            AdditionalProperties = properties.ToArray();
+            reader.ReadEndElement();
+        }
+
+        public XElement ReadXElement(XmlReader reader)
+        {
+            string localName = reader.LocalName;
+            XNamespace ns = reader.NamespaceURI;
+
+            var element = new XElement(ns + localName);
+            var isEmpty = reader.IsEmptyElement;
+            reader.ReadStartElement();
+
+            if (!isEmpty)
+            {
+                while(reader.NodeType != XmlNodeType.EndElement)
+                {
+                    switch(reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            var child = ReadXElement(reader);
+                            element.Add(child);
+                            break;
+                        case XmlNodeType.Text:
+                            element.Add(reader.ReadContentAsString());
+                            break;
+                    }
+                }
+
+                reader.ReadEndElement();
+            }
+
+            return element;
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            var typeInfo = GetType().GetTypeInfo();
+            var rootAttribute = typeInfo.GetCustomAttribute<XmlRootAttribute>();
+            foreach (var propertyInfo in typeInfo.DeclaredProperties)
+            {
+                var localName = propertyInfo.Name;
+                string ns = rootAttribute?.Namespace;
+
+                if (propertyInfo.GetCustomAttribute<XmlIgnoreAttribute>() != null)
+                {
+                    continue;
+                }
+
+                var value = propertyInfo.GetValue(this);
+                if (value == null)
+                {
+                    continue;
+                }
+
+                var attribute = propertyInfo.GetCustomAttribute<XmlAttributeAttribute>();
+                if (attribute != null)
+                {
+                    var tokens = attribute.AttributeName.Split(':');
+                    if(tokens.Length > 0)
+                    {
+                        ns = tokens[0];
+                    }
+                    localName = tokens[tokens.Length - 1];
+                    writer.WriteAttributeString(localName, ns, Convert.ToString(value));
+                    continue;
+                }
+
+                var element = propertyInfo.GetCustomAttribute<XmlElementAttribute>();
+                if (element != null)
+                {
+                    localName = element.ElementName;
+                }
+
+                var propertyTypeInfo = propertyInfo.PropertyType.GetTypeInfo();
+                if (propertyTypeInfo.IsPrimitive || propertyInfo.PropertyType == typeof(string))
+                {
+                    writer.WriteElementString(localName, ns, Convert.ToString(value));
+                }
+                else
+                {
+                    var valueSerializer = new XmlSerializer(propertyInfo.PropertyType);
+                    valueSerializer.Serialize(writer, value);
+                }
+            }
+
+            foreach (var property in AdditionalProperties)
+            {
+                writer.WriteElementString(property.Name.LocalName, property.Name.NamespaceName, property.Value);
+            }
         }
     }
 }

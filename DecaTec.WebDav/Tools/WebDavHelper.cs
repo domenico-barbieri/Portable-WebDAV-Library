@@ -10,6 +10,7 @@ using System.Net.Http;
 using DecaTec.WebDav.WebDavArtifacts;
 using DecaTec.WebDav.Headers;
 using DecaTec.WebDav.Exceptions;
+using System.Diagnostics;
 
 namespace DecaTec.WebDav.Tools
 {
@@ -61,8 +62,9 @@ namespace DecaTec.WebDav.Tools
                     return utf8Encoding.GetString(bArr, 0, bArr.Length);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Debug.WriteLine(e.Message);
                 return string.Empty;
             }
         }
