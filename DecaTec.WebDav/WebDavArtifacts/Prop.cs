@@ -852,66 +852,71 @@ namespace DecaTec.WebDav.WebDavArtifacts
             var typeInfo = GetType().GetTypeInfo();
             var xmlRoot = typeInfo.GetCustomAttribute<XmlRootAttribute>();
 
+            var isEmpty = reader.IsEmptyElement;
             reader.ReadStartElement();
 
             var properties = new List<XElement>();
-            while(reader.NodeType != XmlNodeType.EndElement)
+            if (!isEmpty)
             {
-                var isCustom = true;
-                foreach (var propertyInfo in typeInfo.DeclaredProperties)
+                while (reader.NodeType != XmlNodeType.EndElement)
                 {
-                    var localName = propertyInfo.Name;
+                    var isCustom = true;
+                    foreach (var propertyInfo in typeInfo.DeclaredProperties)
+                    {
+                        var localName = propertyInfo.Name;
 
-                    if (propertyInfo.GetCustomAttribute<XmlIgnoreAttribute>() != null)
-                    {
-                        continue;
-                    }
-
-                    var attribute = propertyInfo.GetCustomAttribute<XmlAttributeAttribute>();
-                    if (attribute != null)
-                    {
-                        var tokens = attribute.AttributeName.Split(':');
-                        localName = tokens[tokens.Length - 1];
-                    }
-                    else
-                    {
-                        var element = propertyInfo.GetCustomAttribute<XmlElementAttribute>();
-                        if (element != null)
+                        if (propertyInfo.GetCustomAttribute<XmlIgnoreAttribute>() != null)
                         {
-                            localName = element.ElementName;
+                            continue;
                         }
-                    }
 
-                    if (localName == reader.LocalName)
-                    {
-                        object value = null;
-
-                        var propertyTypeInfo = propertyInfo.PropertyType.GetTypeInfo();
-                        if (propertyTypeInfo.IsPrimitive || propertyInfo.PropertyType == typeof(string))
+                        var attribute = propertyInfo.GetCustomAttribute<XmlAttributeAttribute>();
+                        if (attribute != null)
                         {
-                            value = reader.ReadElementContentAsObject();
+                            var tokens = attribute.AttributeName.Split(':');
+                            localName = tokens[tokens.Length - 1];
                         }
                         else
                         {
-
-                            var xmlSerializer = new XmlSerializer(propertyInfo.PropertyType);
-                            value = xmlSerializer.Deserialize(reader);
+                            var element = propertyInfo.GetCustomAttribute<XmlElementAttribute>();
+                            if (element != null)
+                            {
+                                localName = element.ElementName;
+                            }
                         }
 
-                        propertyInfo.SetValue(this, value);
-                        isCustom = false;
-                        break;
+                        if (localName == reader.LocalName)
+                        {
+                            object value = null;
+
+                            var propertyTypeInfo = propertyInfo.PropertyType.GetTypeInfo();
+                            if (propertyTypeInfo.IsPrimitive || propertyInfo.PropertyType == typeof(string))
+                            {
+                                value = reader.ReadElementContentAsObject();
+                            }
+                            else
+                            {
+
+                                var xmlSerializer = new XmlSerializer(propertyInfo.PropertyType);
+                                value = xmlSerializer.Deserialize(reader);
+                            }
+
+                            propertyInfo.SetValue(this, value);
+                            isCustom = false;
+                            break;
+                        }
+                    }
+
+                    if (isCustom)
+                    {
+                        properties.Add(ReadXElement(reader));
                     }
                 }
 
-                if (isCustom)
-                {
-                    properties.Add(ReadXElement(reader));
-                }
-            }
+				reader.ReadEndElement();
+			}
 
             AdditionalProperties = properties.ToArray();
-            reader.ReadEndElement();
         }
 
         public XElement ReadXElement(XmlReader reader)
