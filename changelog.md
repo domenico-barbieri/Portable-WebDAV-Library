@@ -1,3 +1,10 @@
+v1.1.6.0
+- The library now supports number signs ('#') in URLs which is usually a special character in URLs (fragment).
+
+v1.1.5.0:
+- Bugfix: WebDavClient/WebDavSession methods for copy/move failed when destination Uri contained special characters.
+- UriHelper: New method EscapePathSegments which escapes only the path segments of a Uri/URL.
+
 v1.1.4.0
 - WebDavSession: New property ThrowExceptions: The methods of WebDavSession usually only return a boolean value indicating if the operation completed successfully. If more information about a failed operation is needed, the WebDvSession has a new property ThrowExceptions. If set to true, errors during WebDAV operations are thrown as exceptions. This property defaults to false.
 - WebDavSession: All constructors now have an optional parameter throwExceptions which defaults to false.

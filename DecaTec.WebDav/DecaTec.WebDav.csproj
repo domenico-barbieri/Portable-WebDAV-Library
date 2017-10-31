@@ -1,8 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>netstandard1.1</TargetFramework>
-        <PackageTargetFallback>$(PackageTargetFallback);portable45-net45+win8+wpa81</PackageTargetFallback>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <PackageTargetFallback>$(PackageTargetFallback);portable45-net45+win8+wpa81</PackageTargetFallback>
+
+    <Version>1.1.6.0</Version>
+    <Authors>DecaTec</Authors>
+    <Company>DecaTec</Company>
+    <Product>PortableWebDavLibrary</Product>
+    <Description>The Portable WebDAV Library is a strongly typed, async WebDAV client library which is fully compliant to RFC 4918, RFC 4331 and "Additional WebDAV Collection Properties". It is implemented as .NETStandard 1.1 library in oder to be used on any platform supporting .NETStandard 1.1.</Description>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/DecaTec/Portable-WebDAV-Library/raw/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/DecaTec/Portable-WebDAV-Library</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/DecaTec/Portable-WebDAV-Library/raw/master/Assets/NuGetLogo.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/DecaTec/Portable-WebDAV-Library</RepositoryUrl>
+    <PackageTags>WebDAV, portable, NETStandard, NETCore, UWP, dotnet, portable-webdav-library, Xamarin, Mono, multiplatform</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageReleaseNotes>Full documentation with changelog is available at https://decatec.de/ext/PortableWebDAVLibrary/Doc</PackageReleaseNotes>
+    <AssemblyVersion>1.1.6.0</AssemblyVersion>
+    <FileVersion>1.1.6.0</FileVersion>
+  </PropertyGroup>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <ItemGroup>
@@ -28,4 +44,11 @@
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ReadMe.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
