@@ -897,11 +897,26 @@ namespace DecaTec.WebDav
         /// <returns>The <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task<IList<WebDavSessionItem>> ListAsync(Uri uri, PropFind propFind)
         {
-            if (propFind == null)
-                throw new ArgumentException("Argument propFind must not be null.");
+            return await ListAsync(uri, propFind, WebDavDepthHeaderValue.One);
+        }
+
+        public async Task<IList<WebDavSessionItem>> ListAsync(Uri uri, PropFind propFind, WebDavDepthHeaderValue depth)
+        {
+            string requestContentString = string.Empty;
+
+            if (propFind != null)
+                requestContentString = WebDavHelper.GetUtf8EncodedXmlWebDavRequestString(WebDavClient.PropFindSerializer, propFind);
+
+            return await ListAsync(uri, requestContentString, depth);
+        }
+
+        public async Task<IList<WebDavSessionItem>> ListAsync(Uri uri, string propFindXmlString, WebDavDepthHeaderValue depth)
+        {
+            if (propFindXmlString == null)
+                throw new ArgumentException("Argument propFindXml must not be null.");
 
             uri = UriHelper.CombineUri(this.BaseUri, uri, true);
-            var response = await this.webDavClient.PropFindAsync(uri, WebDavDepthHeaderValue.One, propFind);
+            var response = await this.webDavClient.PropFindAsync(uri, depth, propFindXmlString);
 
             // Remember the original port to include it in the hrefs later.
             var port = UriHelper.GetPort(uri);

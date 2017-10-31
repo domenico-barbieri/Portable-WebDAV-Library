@@ -107,9 +107,9 @@ namespace DecaTec.WebDav
     /// <seealso cref="DecaTec.WebDav.WebDavSession"/>
     public class WebDavClient : HttpClient
     {
-        private static readonly XmlSerializer PropFindSerializer = new XmlSerializer(typeof(PropFind));
-        private static readonly XmlSerializer PropertyUpdateSerializer = new XmlSerializer(typeof(PropertyUpdate));
-        private static readonly XmlSerializer LockInfoSerializer = new XmlSerializer(typeof(LockInfo));
+        internal static readonly XmlSerializer PropFindSerializer = new XmlSerializer(typeof(PropFind));
+        internal static readonly XmlSerializer PropertyUpdateSerializer = new XmlSerializer(typeof(PropertyUpdate));
+        internal static readonly XmlSerializer LockInfoSerializer = new XmlSerializer(typeof(LockInfo));
 
         private const string MediaTypeXml = "application/xml";
 
