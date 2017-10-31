@@ -14,7 +14,7 @@ namespace DecaTec.WebDav.Extensions
         /// </summary>
         /// <param name="array">The <see cref="XElement"/> array to convert into a Dictionary.</param>
         /// <returns>A Dictionary containing the elements of the <see cref="XElement"/> array.</returns>
-        public static Dictionary<XName, string> ToXNameDictonary(this XElement[] array)
+        public static Dictionary<XName, string> ToXNameDictonary(this IEnumerable<XElement> array)
         {
             if (array == null)
                 return new Dictionary<XName, string>();

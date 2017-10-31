@@ -941,7 +941,7 @@ namespace DecaTec.WebDav
                 DateTime? webDavSessionItemLastAccessed = null;
                 string webDavSessionItemParentName = string.Empty;
                 bool? webDavSessionItemIsFolder = null;
-                XElement[] webDavSessionItemAdditionalProperties = null;
+                IEnumerable<XElement> webDavSessionItemAdditionalProperties = null;
 
                 Uri href = null;
 

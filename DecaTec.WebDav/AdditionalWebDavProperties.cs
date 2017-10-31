@@ -20,7 +20,7 @@ namespace DecaTec.WebDav
         /// Creates a new instance of AdditionalWebDavProperties with the additional properties specified by an <see cref="XElement"/> array.
         /// </summary>
         /// <param name="elements"></param>
-        public AdditionalWebDavProperties(XElement[] elements)
+        public AdditionalWebDavProperties(IEnumerable<XElement> elements)
         {
             this.additionalPropertiesInternal = elements.ToXNameDictonary();
             this.additionalPropertiesInternalOriginal = new Dictionary<XName, string>(this.additionalPropertiesInternal);
@@ -134,7 +134,7 @@ namespace DecaTec.WebDav
         /// <returns>A list of <see cref="XElement"/> with changed and added properties.</returns>
         /// <remarks>When used in a <see cref="WebDavSessionItem"/>, additional properties can be changed, added or removed. This method is then used when it comes to a PROPPATCH 
         /// in order to determine which <see cref="Prop"/>s need to be set for the <see cref="PropertyUpdate"/>.</remarks>
-        public IList<XElement> GetChangedAndAddedProperties()
+        public List<XElement> GetChangedAndAddedProperties()
         {
             // Changed/added when:
             // - a property in the dictionary was changed (and is not null now).
@@ -163,7 +163,7 @@ namespace DecaTec.WebDav
         /// <returns>A list of <see cref="XElement"/> with properties which were removed.</returns>
         /// <remarks>When used in a <see cref="WebDavSessionItem"/>, additional properties can be changed, added or removed. This method is then used when it comes to a PROPPATCH 
         /// in order to determine which <see cref="Prop"/>s need to be set for the <see cref="PropertyUpdate"/>.</remarks>
-        public IList<XElement> GetRemovedProperties()
+        public List<XElement> GetRemovedProperties()
         {
             // The property is to remove if it is was deleted on the source dictionary or is null.
             var xElementList = new List<XElement>();

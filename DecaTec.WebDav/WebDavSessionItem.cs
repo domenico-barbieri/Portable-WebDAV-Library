@@ -46,7 +46,7 @@ namespace DecaTec.WebDav
         public WebDavSessionItem(Uri uri, DateTime? creationDate, string displayName, string contentLanguage, long? contentLength, string contentType, string eTag, DateTime? lastModified,
             long? quotaAvailableBytes, long? quotaUsedBytes, long? childCount, string defaultDocument, string id, bool? isFolder, bool? isStructuredDocument, bool? hasSubDirectories,
             bool? noSubDirectoriesAllowed, long? fileCount, bool? isReserved, long? visibleFiles, string contentClass, bool? isReadonly, bool? isRoot, DateTime? lastAccessed, string name, string parentName,
-            XElement[] additionalProperties = null)
+            IEnumerable<XElement> additionalProperties = null)
         {
             this.uri = uri;
             this.creationDate = creationDate;
@@ -722,7 +722,7 @@ namespace DecaTec.WebDav
 
                 if (xElementList.Count > 0)
                 {
-                    setProp.AdditionalProperties = xElementList.ToArray();
+                    setProp.AdditionalProperties = xElementList;
                     setRequested = true;
                 }
             }
@@ -786,7 +786,7 @@ namespace DecaTec.WebDav
 
                 if (xElementList.Count > 0)
                 {
-                    removeProp.AdditionalProperties = xElementList.ToArray();
+                    removeProp.AdditionalProperties = xElementList;
                     removeRequested = true;
                 }
             }
