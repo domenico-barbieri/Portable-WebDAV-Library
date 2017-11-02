@@ -1,14 +1,12 @@
 ﻿using DecaTec.WebDav.Tools;
 using System;
-using System.Runtime.Serialization;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Xml;
-using System.Xml.Schema;
 using System.Collections.Generic;
 using System.Reflection;
-using System.IO;
-using System.Text;
+using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace DecaTec.WebDav.WebDavArtifacts
 {
@@ -20,7 +18,6 @@ namespace DecaTec.WebDav.WebDavArtifacts
     /// In order to find out which properties are supported by the server, you can use a 'propname' request. Every (string) property, which is <see cref="string.Empty"/> then is supported by the WebDAV server 
     /// (see <see cref="PropFind.CreatePropFindWithPropName"/>).</remarks>
     [DataContract]
-    [XmlType(TypeName = WebDavConstants.Prop, Namespace = WebDavConstants.DAV)]
     [XmlRoot(Namespace = WebDavConstants.DAV, IsNullable = false)]
     public class Prop : IXmlSerializable
     {

@@ -25,14 +25,29 @@ namespace DecaTec.WebDav
         public const string AllProp = "allprop";
 
         /// <summary>
+        /// Constant for 'basicsearch'.
+        /// </summary>
+        public const string BasicSearch = "basicsearch";
+
+        /// <summary>
         /// Constant for 'collection'.
         /// </summary>
         public const string Collection = "collection";
 
         /// <summary>
+        /// Constant for 'eq'.
+        /// </summary>
+        public const string Eq = "eq";
+
+        /// <summary>
         /// Constant for 'exclusive'.
         /// </summary>
         public const string Exclusive = "exclusive";
+
+        /// <summary>
+        /// Constant for 'from'.
+        /// </summary>
+        public const string From = "from";
 
         /// <summary>
         /// Constant for 'include'.
@@ -45,9 +60,19 @@ namespace DecaTec.WebDav
         public const string KeepAlive = "keepalive";
 
         /// <summary>
+        /// Constant for 'like'.
+        /// </summary>
+        public const string Like = "like";
+
+        /// <summary>
         /// Constant for 'link'.
         /// </summary>
         public const string Link = "link";
+
+        /// <summary>
+        /// Constant for 'literal'.
+        /// </summary>
+        public const string Literal = "literal";
 
         /// <summary>
         /// Constant for 'lockdiscovery'.
@@ -140,6 +165,21 @@ namespace DecaTec.WebDav
         public const string Response = "response";
 
         /// <summary>
+        /// Constant for 'scope'.
+        /// </summary>
+        public const string Scope = "scope";
+
+        /// <summary>
+        /// Constant for 'select'.
+        /// </summary>
+        public const string Select = "select";
+
+        /// <summary>
+        /// Constant for 'searchrequest'.
+        /// </summary>
+        public const string SearchRequest = "searchrequest";
+
+        /// <summary>
         /// Constant for 'set'.
         /// </summary>
         public const string Set = "set";
@@ -163,6 +203,11 @@ namespace DecaTec.WebDav
         /// Constant for 'locktoken'.
         /// </summary>
         public const string LockToken = "locktoken";
+
+        /// <summary>
+        /// Constant for 'where'.
+        /// </summary>
+        public const string Where = "where";
 
         /// <summary>
         /// Constant for 'write'.
