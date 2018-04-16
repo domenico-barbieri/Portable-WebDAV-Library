@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.1</TargetFramework>
-    <PackageTargetFallback>$(PackageTargetFallback);portable45-net45+win8+wpa81</PackageTargetFallback>
+    <AssetTargetFallback>$(AssetTargetFallback);portable45-net45+win8+wpa81</AssetTargetFallback>
 
     <Version>1.1.6.0</Version>
     <Authors>DecaTec</Authors>
